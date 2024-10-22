@@ -8,10 +8,10 @@ const Layout = ({ children }) => {
         margin: "0 auto",
         height: "100vh",
         display: "flex",
-        justifyContent: "space-between",
+        // justifyContent: "space-between",
         flexDirection: "column",
         background: "white",
-        width: "100vw",
+        // width: "100vw",
       }}
     >
       <HeaderBar />

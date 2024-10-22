@@ -44,7 +44,9 @@ export const Register = () => {
                 className={s.input}
               ></Field>
             </FormLabel>
-            <button type="submit">Register</button>
+            <button type="submit" className={s.btn}>
+              Register
+            </button>
             {/* <Link to="/login"> Do you already have account? Please LogIn</Link> */}
           </Form>
         </Formik>

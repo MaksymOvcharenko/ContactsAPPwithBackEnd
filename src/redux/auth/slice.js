@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register } from "./operations";
+import { login, logout, refresh, register } from "./operations";
 
 const authSlice = createSlice({
   name: "auth",
@@ -13,29 +13,34 @@ const authSlice = createSlice({
     isRefreshing: false,
   },
   extraReducers: (builder) => {
-    builder.addCase(register.fulfilled, (state, action) => {
-      state.user = action.payload.user;
-      //   state.token = action.payload.token;
-      //   state.isLoggedIn = true;
-    });
-    //   .addCase(logIn.fulfilled, (state, action) => {
-    //     state.user = action.payload.user;
-    //     state.token = action.payload.token;
-    //     state.isLoggedIn = true;
-    //   })
-    //   .addCase(logOut.fulfilled, (state) => {
-    //     state.user = { name: null, email: null };
-    //     state.token = null;
-    //     state.isLoggedIn = false;
-    //   })
+    builder
+      .addCase(register.fulfilled, (state, action) => {
+        console.log(action.payload);
+
+        state.user = action.payload.user;
+        state.token = action.payload.accessToken;
+        state.isLoggedIn = true;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.user.email = action.payload.email;
+        state.isLoggedIn = true;
+        state.token = action.payload.data.accessToken;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = { name: null, email: null };
+        state.token = null;
+        state.isLoggedIn = false;
+      })
+      .addCase(refresh.fulfilled, (state) => {
+        // state.user = action.payload;
+        state.isLoggedIn = true;
+        // state.isRefreshing = false;
+      });
+
     //   .addCase(refreshUser.pending, (state) => {
     //     state.isRefreshing = true;
     //   })
-    //   .addCase(refreshUser.fulfilled, (state, action) => {
-    //     state.user = action.payload;
-    //     state.isLoggedIn = true;
-    //     state.isRefreshing = false;
-    //   })
+
     //   .addCase(refreshUser.rejected, (state) => {
     //     state.isRefreshing = false;
     //   });

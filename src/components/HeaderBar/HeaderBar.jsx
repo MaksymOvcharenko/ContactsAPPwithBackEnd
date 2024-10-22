@@ -1,6 +1,7 @@
 import { IoIosLogIn } from "react-icons/io";
 import s from "./HeaderBar.module.css";
 import { FcBusinessContact } from "react-icons/fc";
+import { NavLink } from "react-router-dom";
 const HeaderBar = () => {
   return (
     <div className={s.header}>
@@ -13,7 +14,9 @@ const HeaderBar = () => {
       </nav>
       <ul className={s.authList}>
         <li className={s.authItem}>
-          <IoIosLogIn size={40} />
+          <NavLink to={"auth/register"}>
+            <IoIosLogIn size={40} />
+          </NavLink>
         </li>
       </ul>
     </div>

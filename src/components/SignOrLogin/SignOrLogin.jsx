@@ -1,7 +1,28 @@
+import { Link, Outlet } from "react-router-dom";
+
 import s from "./SignOrLogin.module.css";
+import { useSelector } from "react-redux";
+import {
+  selectIsLoggedIn,
+  selectUserEmail,
+} from "../../redux/auth/selectors.js";
+import LogOut from "../LogOut/LogOut.jsx";
 
 const SignOrLogin = () => {
-  return <div className={s.cont}>SignOrLogin</div>;
+  const isLogged = useSelector(selectIsLoggedIn);
+  const userEmail = useSelector(selectUserEmail);
+  return (
+    <>
+      {isLogged ? <h2> Hello {userEmail}</h2> : <p>Please LogIn</p>}
+
+      <div className={s.cont}>
+        <Link to="login"> Login</Link>
+        <Link to="register">Register</Link>
+      </div>
+      <Outlet />
+      {isLogged ? <LogOut /> : ""}
+    </>
+  );
 };
 
 export default SignOrLogin;

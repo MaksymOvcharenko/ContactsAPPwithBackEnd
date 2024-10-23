@@ -19,10 +19,16 @@ export const register = createAsyncThunk(
       const res = await axios.post("/auth/register", credentials);
       if (res.data.status === 201) {
         console.log(res.data + "Все ок, можно логиниться");
-        const login = await axios.post("/auth/login", {
-          email: credentials.email,
-          password: credentials.password,
-        });
+        const login = await axios.post(
+          "/auth/login",
+          {
+            email: credentials.email,
+            password: credentials.password,
+          },
+          {
+            withCredentials: true, // Це важливо для того, щоб куки були надіслані з запитом
+          }
+        );
 
         token = login.data.data.accessToken;
         setAuthHeader(token);
@@ -40,10 +46,17 @@ export const login = createAsyncThunk(
     try {
       console.log(credentials);
 
-      const login = await axios.post("/auth/login", {
-        email: credentials.email,
-        password: credentials.password,
-      });
+      const login = await axios.post(
+        "/auth/login",
+        {
+          email: credentials.email,
+          password: credentials.password,
+        },
+
+        {
+          withCredentials: true, // Це важливо для того, щоб куки були надіслані з запитом
+        }
+      );
       const token = login.data.data.accessToken;
       setAuthHeader(token);
       return { ...login.data, email: credentials.email };
@@ -54,7 +67,9 @@ export const login = createAsyncThunk(
 );
 export const logout = createAsyncThunk("/auth/logout", async (__, thunkAPI) => {
   try {
-    await axios.post("/auth/logout");
+    await axios.post("/auth/logout", null, {
+      withCredentials: true, // Це важливо для того, щоб куки були надіслані з запитом
+    });
     clearAuthHeader();
   } catch (error) {
     return thunkAPI.rejectWithValue(error.message);
@@ -65,8 +80,8 @@ export const refresh = createAsyncThunk(
   async (__, thunkAPI) => {
     const state = thunkAPI.getState();
     const persistedToken = state.auth.token;
-    console.log("state" + state);
-    console.log("persistedToken" + persistedToken);
+    // console.log("state" + state);
+    // console.log("persistedToken" + persistedToken);
     if (persistedToken === null) {
       return thunkAPI.rejectWithValue("Unable to fetch user");
     }
@@ -75,6 +90,37 @@ export const refresh = createAsyncThunk(
       const res = await axios.post("/auth/refresh", null, {
         withCredentials: true, // Це важливо для того, щоб куки були надіслані з запитом
       });
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const sendResetPasswordEmail = createAsyncThunk(
+  "/auth/send-reset-password",
+  async (credentials, thunkAPI) => {
+    try {
+      clearAuthHeader();
+      console.log(credentials);
+
+      const res = await axios.post("/auth/send-reset-email", {
+        email: credentials,
+      });
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const resetPassword = createAsyncThunk(
+  "/reset-password",
+  async (credentials, thunkAPI) => {
+    try {
+      clearAuthHeader();
+      console.log(credentials);
+
+      const res = await axios.post("/auth/reset-password", credentials);
+
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

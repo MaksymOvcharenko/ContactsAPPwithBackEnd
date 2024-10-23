@@ -8,6 +8,8 @@ import { Login } from "./components/Login/Login.jsx";
 import { useDispatch } from "react-redux";
 import { refresh } from "./redux/auth/operations.js";
 import { useEffect } from "react";
+import ResetPasswordRequest from "./components/ResetPasswordRequest/ResetPasswordRequest.jsx";
+import ResetPassword from "./components/ResetPassword/ResetPassword.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +28,11 @@ function App() {
             <Route path="register" element={<Register />} />
             {/* <Route path="reset-password" element={<ResetPassword />} /> */}
           </Route>
+          <Route
+            path="/auth/send-reset-password"
+            element={<ResetPasswordRequest />}
+          />
+          <Route path="/reset-password" element={<ResetPassword />} />
           {/* <Route path="/contacts" element={<ContactList />}>
             <Route path=":contactId" element={<ContactInfo />} />
           </Route> */}

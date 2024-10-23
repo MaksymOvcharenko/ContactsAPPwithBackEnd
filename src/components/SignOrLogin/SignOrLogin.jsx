@@ -13,7 +13,7 @@ const SignOrLogin = () => {
   const userEmail = useSelector(selectUserEmail);
   return (
     <>
-      {isLogged ? <h2> Hello {userEmail}</h2> : <p>Please LogIn</p>}
+      {isLogged ? <h2> Hello {userEmail}</h2> : ""}
 
       <div className={s.cont}>
         <Link to="login"> Login</Link>
